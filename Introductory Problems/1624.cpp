@@ -3,57 +3,18 @@ using namespace std;
 using ll = long long;
 
 int board[8][8], ans = 0;
-int diag_num[8][8], diag_num2[8][8];
-
-void pre() {
-  int cur = 0;
-  for (int i = 7; i >= 0; --i) {
-    int row = i, col = 0;
-    while (row < 8 and col < 8) {
-      diag_num[row][col] = cur;
-      row++, col++;
-    }
-    cur++;
-  }
-  for (int i = 1; i <= 7; ++i) {
-    int col = i, row = 0;
-    while (row < 8 and col < 8) {
-      diag_num[row][col] = cur;
-      row++, col++;
-    } 
-    cur++;
-  }
-  cur = 0;
-  for (int i = 0; i <= 7; ++i) {
-    int row = 0, col = i;
-    while (row < 8 and col >= 0) {
-      diag_num2[row][col] = cur;
-      row++, col--;
-    }
-    cur++;
-  } 
-  for (int i = 1; i <= 7; ++i) {
-    int row = i, col = 7;
-    while (row < 8 and col >= 0) {
-      diag_num2[row][col] = cur;
-      row++, col--;
-    }
-    cur++;
-  }
-}
 
 int get_diag_num(int row, int col) {
-  return diag_num[row][col];
+  return row + col;
 }
 
 int get_diag_num2(int row, int col) {
-  return diag_num2[row][col];
+  return row - col + 8;
 }
 
 bool possible(int row, int col, int col_mask, int diag_mask, int diag_mask2) {
   int num = get_diag_num(row, col), num2 = get_diag_num2(row, col);
-  if ((col_mask & (1 << col)) != 0 or (diag_mask & (1 << num)) != 0 or (diag_mask2 & (1 << num2)) != 0)  return false;
-  else return true;
+  return ((col_mask & (1 << col)) == 0 and (diag_mask & (1 << num)) == 0 and (diag_mask2 & (1 << num2)) == 0);
 }
 
 void f(int row, int col_mask, int diag_mask, int diag_mask2) {
@@ -67,6 +28,7 @@ void f(int row, int col_mask, int diag_mask, int diag_mask2) {
     }
   }
 }
+
 
 void solve() {
   for (int i = 0; i < 8; ++i) {
@@ -84,7 +46,6 @@ int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
   
-  pre();
   int tc = 1;
   //cin >> tc;
   while (tc--) {
